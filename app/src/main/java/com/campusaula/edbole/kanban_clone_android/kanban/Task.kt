@@ -1,4 +1,4 @@
-package com.campusaula.edbole.KanbanCloneAndroid.kanban
+package com.campusaula.edbole.kanban_clone_android.kanban
 
 import com.google.gson.annotations.SerializedName
 

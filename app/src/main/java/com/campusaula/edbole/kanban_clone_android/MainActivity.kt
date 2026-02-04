@@ -1,4 +1,4 @@
-package com.campusaula.edbole.KanbanCloneAndroid
+package com.campusaula.edbole.kanban_clone_android
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

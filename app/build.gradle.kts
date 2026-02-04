@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.campusaula.edbole.KanbanCloneAndroid"
+    namespace = "com.campusaula.edbole.kanban_clone_android"
     compileSdk {
         version = release(36)
     }
