@@ -8,6 +8,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.campusaula.edbole.kanban_clone_android.network.ApiService
 import com.campusaula.edbole.kanban_clone_android.network.RetrofitInstance
+import com.campusaula.edbole.kanban_clone_android.kanban.ErrorResponse
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 
@@ -58,9 +60,11 @@ class LoginActivity : AppCompatActivity() {
                         )
                     )
 
+                    val baseUrl = retrofit.baseUrl().toString()
+                    val baseHost = retrofit.baseUrl().host
+
                     if (loginResponse.isSuccessful) {
                         // Después del login exitoso OkHttp/CookieJar habrá guardado las cookies.
-                        val baseUrl = retrofit.baseUrl().toString()
                         val authValue = RetrofitInstance.getAuthCookieForUrl(baseUrl)
                         if (authValue != null) {
                             android.widget.Toast.makeText(this@LoginActivity, "Auth cookie guardada", android.widget.Toast.LENGTH_SHORT).show()
@@ -68,7 +72,23 @@ class LoginActivity : AppCompatActivity() {
                             android.widget.Toast.makeText(this@LoginActivity, "Login OK pero no se encontró cookie de auth", android.widget.Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        android.widget.Toast.makeText(this@LoginActivity, "Login failed: ${loginResponse.code()}", android.widget.Toast.LENGTH_SHORT).show()
+                        if (loginResponse.code() == 401) {
+                            // parse error body if possible
+                            val errBody = loginResponse.errorBody()?.string()
+                            val gson = Gson()
+                            val errMsg = try {
+                                val err = gson.fromJson(errBody, ErrorResponse::class.java)
+                                err.detail ?: "Unauthorized"
+                            } catch (_: Exception) {
+                                errBody ?: "Unauthorized"
+                            }
+                            // clear stored cookies for base host
+                            RetrofitInstance.clearCookiesForHost(baseHost)
+
+                            android.widget.Toast.makeText(this@LoginActivity, "Login failed (401): $errMsg", android.widget.Toast.LENGTH_SHORT).show()
+                        } else {
+                            android.widget.Toast.makeText(this@LoginActivity, "Login failed: ${loginResponse.code()}", android.widget.Toast.LENGTH_SHORT).show()
+                        }
                     }
 
                 } catch (ex: Exception){
