@@ -15,14 +15,17 @@ import com.campusaula.edbole.kanban_clone_android.R
 import com.campusaula.edbole.kanban_clone_android.kanban.Project
 import com.campusaula.edbole.kanban_clone_android.network.ApiService
 import com.campusaula.edbole.kanban_clone_android.network.RetrofitInstance
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var api: ApiService
     private lateinit var projectList : List<Project>
+
     private lateinit var loggedInAs: TextView
     private lateinit var logoutButton: Button
+    private lateinit var addProjectActionButton: FloatingActionButton
     private lateinit var projectsRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         /* Activity components */
         loggedInAs = findViewById(R.id.loggedInAs)
         logoutButton = findViewById(R.id.logoutButton)
+        addProjectActionButton = findViewById(R.id.addProjectActionButton)
         projectsRecyclerView = findViewById(R.id.projectsRecyclerView)
         projectsRecyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         val adapter = ProjectItemAdapter(projectList) { project ->
@@ -49,6 +53,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         projectsRecyclerView.adapter = adapter
+
+        addProjectActionButton.setOnClickListener {
+            val intent = Intent(this, CreateProjectActivity::class.java)
+            startActivity(intent)
+        }
 
         /* Getting the logged-in user info */
         lifecycleScope.launch{

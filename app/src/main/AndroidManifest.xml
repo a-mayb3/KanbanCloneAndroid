@@ -16,6 +16,9 @@
             android:theme="@style/Theme.KanbanCloneAndroid"
             android:usesCleartextTraffic="true">
         <activity
+                android:name=".ui.CreateProjectActivity"
+                android:exported="false" />
+        <activity
                 android:name=".ui.ProjectDetailActivity"
                 android:exported="false" />
         <activity
