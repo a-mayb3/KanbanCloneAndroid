@@ -8,6 +8,11 @@ class Project{
     val description: String = ""
     val users: List<User> = emptyList()
     val tasks: List<Task> = emptyList()
+
+
+    override fun toString(): String {
+        return "Project(id=$id, name='$name', description='$description', users=$users, tasks=$tasks)"
+    }
 }
 
 data class ProjectBase(

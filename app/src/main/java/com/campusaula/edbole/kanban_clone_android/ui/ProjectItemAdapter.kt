@@ -37,7 +37,7 @@ class ProjectItemAdapter(
         private val descTv: TextView = itemView.findViewById(R.id.projectDescription)
 
         fun bind(project: Project) {
-            nameTv.text = project.name
+            nameTv.text = project.id.toString() + " " + project.name
             descTv.text = project.description
         }
     }
