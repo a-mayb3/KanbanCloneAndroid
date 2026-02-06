@@ -16,10 +16,10 @@
         android:theme="@style/Theme.KanbanCloneAndroid"
         android:usesCleartextTraffic="true" >
         <activity
-            android:name="com.campusaula.edbole.kanban_clone_android.LoginActivity"
+            android:name="com.campusaula.edbole.kanban_clone_android.ui.LoginActivity"
             android:exported="false" />
         <activity
-            android:name="com.campusaula.edbole.kanban_clone_android.MainActivity"
+            android:name="com.campusaula.edbole.kanban_clone_android.ui.MainActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

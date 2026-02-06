@@ -1,25 +1,31 @@
-package com.campusaula.edbole.kanban_clone_android
+package com.campusaula.edbole.kanban_clone_android.ui
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.campusaula.edbole.kanban_clone_android.R
 import com.campusaula.edbole.kanban_clone_android.network.ApiService
 import com.campusaula.edbole.kanban_clone_android.network.RetrofitInstance
 import com.campusaula.edbole.kanban_clone_android.kanban.ErrorResponse
+import com.campusaula.edbole.kanban_clone_android.kanban.UserLogin
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var emailInput : androidx.appcompat.widget.AppCompatEditText
-    private lateinit var passwordInput : androidx.appcompat.widget.AppCompatEditText
+    private lateinit var emailInput : AppCompatEditText
+    private lateinit var passwordInput : AppCompatEditText
 
-    private lateinit var loginButton : androidx.appcompat.widget.AppCompatButton
-    private lateinit var logonButton : androidx.appcompat.widget.AppCompatButton
+    private lateinit var loginButton : AppCompatButton
+    private lateinit var logonButton : AppCompatButton
 
     private lateinit var retrofit : Retrofit
     private lateinit var api : ApiService
@@ -47,14 +53,14 @@ class LoginActivity : AppCompatActivity() {
             val password = passwordInput.text.toString()
 
             if (email.isEmpty() && password.isEmpty()) {
-                android.widget.Toast.makeText(this, "Please enter email and password", android.widget.Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             lifecycleScope.launch{
                 try {
                     val loginResponse = api.login(
-                        com.campusaula.edbole.kanban_clone_android.kanban.UserLogin(
+                        UserLogin(
                             email = email,
                             password = password
                         )
@@ -67,10 +73,14 @@ class LoginActivity : AppCompatActivity() {
                         // Después del login exitoso OkHttp/CookieJar habrá guardado las cookies.
                         val authValue = RetrofitInstance.getAuthCookieForUrl(baseUrl)
                         if (authValue != null) {
-                            android.widget.Toast.makeText(this@LoginActivity, "Auth cookie guardada", android.widget.Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@LoginActivity, "Auth cookie guardada", Toast.LENGTH_SHORT).show()
                         } else {
-                            android.widget.Toast.makeText(this@LoginActivity, "Login OK pero no se encontró cookie de auth", android.widget.Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@LoginActivity, "Login OK pero no se encontró cookie de auth", Toast.LENGTH_SHORT).show()
                         }
+                        // Navegar a MainActivity
+                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
                     } else {
                         if (loginResponse.code() == 401) {
                             // parse error body if possible
@@ -85,14 +95,14 @@ class LoginActivity : AppCompatActivity() {
                             // clear stored cookies for base host
                             RetrofitInstance.clearCookiesForHost(baseHost)
 
-                            android.widget.Toast.makeText(this@LoginActivity, "Login failed (401): $errMsg", android.widget.Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@LoginActivity, "Login failed (401): $errMsg", Toast.LENGTH_SHORT).show()
                         } else {
-                            android.widget.Toast.makeText(this@LoginActivity, "Login failed: ${loginResponse.code()}", android.widget.Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@LoginActivity, "Login failed: ${loginResponse.code()}", Toast.LENGTH_SHORT).show()
                         }
                     }
 
                 } catch (ex: Exception){
-                    android.widget.Toast.makeText(this@LoginActivity, "Login failed: ${ex.message}", android.widget.Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@LoginActivity, "Login failed: ${ex.message}", Toast.LENGTH_SHORT).show()
                 }
 
             }
