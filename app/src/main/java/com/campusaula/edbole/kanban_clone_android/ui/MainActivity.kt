@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import com.campusaula.edbole.kanban_clone_android.R
 import com.campusaula.edbole.kanban_clone_android.kanban.Project
 import com.campusaula.edbole.kanban_clone_android.network.ApiService
@@ -20,8 +21,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var api: ApiService
     private lateinit var projectList : List<Project>
-    private lateinit var loggedInAs: TextView;
-    private lateinit var logoutButton: Button;
+    private lateinit var loggedInAs: TextView
+    private lateinit var logoutButton: Button
+    private lateinit var projectsRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +41,14 @@ class MainActivity : AppCompatActivity() {
         /* Activity components */
         loggedInAs = findViewById(R.id.loggedInAs)
         logoutButton = findViewById(R.id.logoutButton)
+        projectsRecyclerView = findViewById(R.id.projectsRecyclerView)
+        projectsRecyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
+        val adapter = ProjectItemAdapter(projectList) { project ->
+            val intent = Intent(this, ProjectDetailActivity::class.java)
+            intent.putExtra("project_id", project.id)
+            startActivity(intent)
+        }
+        projectsRecyclerView.adapter = adapter
 
         /* Getting the logged-in user info */
         lifecycleScope.launch{
@@ -47,6 +57,8 @@ class MainActivity : AppCompatActivity() {
             if (getMe.isSuccessful){
                 val user = getMe.body()
                 loggedInAs.text = "Logged in as: ${user?.name}"
+                projectList = api.getAllProjects().body()!!
+                adapter.submitList(projectList)
             } else {
                 val intent = Intent(this@MainActivity, LoginActivity::class.java)
                 startActivity(intent)
