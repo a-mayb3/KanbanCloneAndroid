@@ -11,7 +11,7 @@ interface ApiService {
     @POST("auth/login/")
     suspend fun login(@Body userLogin: UserLogin): Response<LoginResponse>
 
-    @POST("me/logout/")
+    @GET("me/logout/")
     suspend fun logout(): Response<Unit>
 
     @DELETE("me/delete-me/")
