@@ -33,12 +33,12 @@ class ProjectItemAdapter(
     override fun getItemCount(): Int = items.size
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val nameTv: TextView = itemView.findViewById(R.id.projectName)
-        private val descTv: TextView = itemView.findViewById(R.id.projectDescription)
+        private val nameTextView: TextView = itemView.findViewById(R.id.projectName)
+        private val descriptionTextView: TextView = itemView.findViewById(R.id.projectDescription)
 
         fun bind(project: Project) {
-            nameTv.text = project.id.toString() + " " + project.name
-            descTv.text = project.description
+            nameTextView.text           = project.name
+            descriptionTextView.text    = project.description
         }
     }
 }

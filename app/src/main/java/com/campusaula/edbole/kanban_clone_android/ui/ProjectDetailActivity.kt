@@ -1,14 +1,17 @@
 package com.campusaula.edbole.kanban_clone_android.ui
 
+import android.content.Intent
 import android.health.connect.datatypes.units.Percentage
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import com.campusaula.edbole.kanban_clone_android.R
 import com.campusaula.edbole.kanban_clone_android.kanban.Project
 import com.campusaula.edbole.kanban_clone_android.kanban.Task
@@ -22,10 +25,17 @@ class ProjectDetailActivity : AppCompatActivity() {
 
     private lateinit var api: ApiService
 
+    private lateinit var returnActionButton: FloatingActionButton
+    private lateinit var addTaskButton: Button
+    private lateinit var addCollaboratorButton: Button
+
+    private lateinit var collaboratorListRecycler: RecyclerView
+//    private lateinit var collaboratorListAdapter: CollaboratorListAdapter
+
     private lateinit var projectTitleText : TextView
     private lateinit var projectDescriptionText : TextView
     private lateinit var completedPercentageText: TextView
-    private lateinit var returnActionButton: FloatingActionButton
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,14 +46,36 @@ class ProjectDetailActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+
         api = RetrofitInstance.getRetrofit(applicationContext).create(ApiService::class.java)
+        val projectId = intent.getIntExtra("project_id", -1)
+
         projectTitleText = findViewById(R.id.projectTitleText)
         projectDescriptionText = findViewById(R.id.projectDescriptionText)
         completedPercentageText = findViewById(R.id.completedPercentageText)
+
         returnActionButton = findViewById(R.id.returnActionButton)
         returnActionButton.setOnClickListener { finish() }
 
-        val projectId : Int = intent.getIntExtra("project_id", -1)
+        addTaskButton = findViewById(R.id.addTaskButton)
+//        addTaskButton.setOnClickListener {
+//            val intent: Intent = Intent(this, CreateTaskActivity::class.java)
+//            intent.putExtra("project_id", projectId)
+//            startActivity(intent)
+//        }
+
+        addCollaboratorButton = findViewById(R.id.addCollaboratorButton)
+//        addCollaboratorButton.setOnClickListener {
+//            val intent: Intent = Intent(this, AddCollaboratorActivity::class.java)
+//            intent.putExtra("project_id", projectId)
+//            startActivity(intent)
+//        }
+
+        collaboratorListRecycler = findViewById(R.id.collaboratorListRecycler)
+//        collaboratorListAdapter =
+        collaboratorListRecycler.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
+
 
         if (projectId > 0) {
             Log.d("ProjectDetailActivity", "Received project ID: $projectId")
@@ -83,10 +115,13 @@ class ProjectDetailActivity : AppCompatActivity() {
                     finish()
                 }
             }
-        } else {
+        }
+        else {
             Log.e("ProjectDetailActivity", "No project ID found in intent")
             finish()
         }
+
+
 
     }
 }
