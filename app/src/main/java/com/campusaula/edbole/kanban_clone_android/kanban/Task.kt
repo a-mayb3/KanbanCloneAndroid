@@ -3,15 +3,15 @@ package com.campusaula.edbole.kanban_clone_android.kanban
 import com.google.gson.annotations.SerializedName
 
 enum class TaskStatus {
-    @SerializedName("PENDING")
+    @SerializedName("pending")
     PENDING,
-    @SerializedName("IN_PROGRESS")
+    @SerializedName("in_progress")
     IN_PROGRESS,
-    @SerializedName("COMPLETED")
+    @SerializedName("completed")
     COMPLETED,
-    @SerializedName("FAILED")
+    @SerializedName("failed")
     FAILED,
-    @SerializedName("STASHED")
+    @SerializedName("stashed")
     STASHED
 }
 
@@ -19,7 +19,7 @@ class Task {
     val id: Int = 0
     val title: String = ""
     val description: String = ""
-    val status: TaskStatus = TaskStatus.PENDING
+    var status: TaskStatus = TaskStatus.PENDING
     val project: Project? = null
 }
 
@@ -35,4 +35,15 @@ data class TaskBase(
 
     @SerializedName("status")
     val status: TaskStatus
+)
+
+data class TaskUpdate(
+    @SerializedName("title")
+    val title : String?,
+
+    @SerializedName("description")
+    val description : String?,
+
+    @SerializedName("status")
+    val status: TaskStatus?
 )
