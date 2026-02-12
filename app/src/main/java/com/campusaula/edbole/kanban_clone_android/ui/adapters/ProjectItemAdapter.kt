@@ -1,4 +1,4 @@
-package com.campusaula.edbole.kanban_clone_android.ui
+package com.campusaula.edbole.kanban_clone_android.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.View
