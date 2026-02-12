@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="task_status_options">
+        <item>Pending</item>
+        <item>In progress</item>
+        <item>Completed</item>
+        <item>Stashed</item>
+        <item>Failed</item>
+    </string-array>
+</resources>

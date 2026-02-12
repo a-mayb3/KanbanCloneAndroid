@@ -40,6 +40,18 @@ interface ApiService {
     @GET("projects/{project_id}/users/")
     suspend fun getProjectUsers(@Path("project_id") projectId: Int): Response<List<UserBase>>
 
+    @POST("projects/{project_id}/users/")
+    suspend fun addProjectCollaborator(
+        @Path("project_id") projectId: Int,
+        @Body email: Map<String, String>
+    ): Response<Unit>
+
+    @DELETE("projects/{project_id}/users/{user_id}/")
+    suspend fun removeProjectCollaborator(
+        @Path("project_id") projectId: Int,
+        @Path("user_id") userId: Int
+    ): Response<Unit>
+
     @POST("projects/")
     suspend fun createProject(@Body projectCreate: ProjectCreate): Response<ProjectBase>
 
@@ -56,5 +68,18 @@ interface ApiService {
 
     @POST("projects/{project_id}/tasks/")
     suspend fun createTask(@Path("project_id") projectId: Int, @Body taskBase: TaskBase): Response<TaskBase>
+
+    @PUT("projects/{project_id}/tasks/{task_id}/")
+    suspend fun updateProjectTask(
+        @Path("project_id") projectId: Int,
+        @Path("task_id") taskId: Int,
+        @Body taskUpdate: TaskUpdate
+    ): Response<Unit>
+
+    @DELETE("projects/{project_id}/tasks/{task_id}/")
+    suspend fun deleteProjectTask(
+        @Path("project_id") projectId: Int,
+        @Path("task_id") taskId: Int
+    ): Response<Unit>
 
 }
