@@ -42,8 +42,8 @@
             android:textSize="@dimen/text_size_subtitle"
             android:textStyle="bold"
             android:layout_marginTop="@dimen/margin_medium"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp" />
+            android:paddingLeft="@dimen/padding_standard"
+            android:paddingRight="@dimen/padding_standard" />
 
         <EditText
             android:id="@+id/taskTitleInput"
@@ -64,8 +64,8 @@
             android:textSize="@dimen/text_size_subtitle"
             android:textStyle="bold"
             android:layout_marginTop="@dimen/margin_medium"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp" />
+            android:paddingLeft="@dimen/padding_standard"
+            android:paddingRight="@dimen/padding_standard" />
 
         <EditText
                 android:id="@+id/taskDescriptionInput"
@@ -89,8 +89,8 @@
             android:textSize="@dimen/text_size_subtitle"
             android:textStyle="bold"
             android:layout_marginTop="@dimen/margin_medium"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp" />
+            android:paddingLeft="@dimen/padding_standard"
+            android:paddingRight="@dimen/padding_standard" />
 
         <Spinner
             android:id="@+id/taskStatusSpinner"
