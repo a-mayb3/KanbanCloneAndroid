@@ -2,4 +2,15 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Primary Colors -->
+    <color name="primary_green">#469E29</color>
+    <color name="danger_red">#FF0000</color>
+    <color name="warning_orange">#FF9800</color>
+
+    <!-- Text Colors -->
+    <color name="text_secondary">#666666</color>
+
+    <!-- Background Colors -->
+    <color name="transparent_red">#24FF5757</color>
 </resources>
