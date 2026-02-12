@@ -1,4 +1,4 @@
-package com.campusaula.edbole.KanbanCloneAndroid
+package com.campusaula.edbole.kanban_clone_android
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

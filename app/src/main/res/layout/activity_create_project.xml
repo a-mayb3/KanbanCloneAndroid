@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.CreateProjectActivity">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:contentDescription="return back to home"
+            android:focusable="true"
+            app:srcCompat="@android:drawable/ic_menu_revert"
+            android:id="@+id/returnActionButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/fab_margin_bottom"
+            android:layout_marginEnd="@dimen/fab_margin_end"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/bottom_padding_for_fab">
+
+        <TextView
+                android:text="Create a new project..."
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/activityTitle"
+                android:padding="@dimen/padding_standard"
+                android:textSize="@dimen/text_size_title"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/margin_tiny" />
+
+        <TextView
+                android:text="Project name:"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/newProjectNameLabel"
+                android:textSize="@dimen/text_size_subtitle"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:paddingLeft="@dimen/padding_standard"
+                android:paddingRight="@dimen/padding_standard" />
+
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/newProjectName"
+                android:hint="My new project!"
+                android:inputType="text"
+                android:padding="@dimen/padding_standard"
+                android:layout_marginLeft="@dimen/margin_standard"
+                android:layout_marginRight="@dimen/margin_standard"
+                android:layout_marginTop="@dimen/margin_small" />
+
+        <TextView
+                android:text="Project description:"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/newProjectDescriptionLabel"
+                android:textSize="@dimen/text_size_subtitle"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:paddingLeft="@dimen/padding_standard"
+                android:paddingRight="@dimen/padding_standard" />
+
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/newProjectDescription"
+                android:hint="This is my new super-special project that will change the world!!!"
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:maxLines="5"
+                android:gravity="start|top"
+                android:padding="@dimen/padding_standard"
+                android:layout_marginLeft="@dimen/margin_standard"
+                android:layout_marginRight="@dimen/margin_standard"
+                android:layout_marginTop="@dimen/margin_small" />
+
+        <Button
+                android:text="Create new project"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/newProjectCreateButton"
+                android:backgroundTint="@color/primary_green"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginLeft="@dimen/margin_standard"
+                android:layout_marginRight="@dimen/margin_standard" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

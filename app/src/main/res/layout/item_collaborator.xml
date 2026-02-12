@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal|end"
+        android:layout_margin="8dp"
+        android:id="@+id/linearLayout">
+
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="4dp">
+
+        <TextView
+                android:id="@+id/collaboratorNameText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Collaborator Name"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+        <TextView
+                android:text="example@email.com"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/collaboratorEmailText"
+                android:textStyle="italic" />
+    </LinearLayout>
+
+    <Button
+            android:id="@+id/removeCollaboratorButton"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            style="@style/Widget.Material3.Button.Icon"
+            app:icon="@android:drawable/ic_delete"
+            android:backgroundTint="@color/transparent_red"
+            app:iconTint="@color/danger_red"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.333" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
