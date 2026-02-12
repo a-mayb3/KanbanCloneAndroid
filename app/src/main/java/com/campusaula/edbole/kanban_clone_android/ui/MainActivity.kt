@@ -82,8 +82,9 @@ class MainActivity : AppCompatActivity() {
                 if (logoutResponse.isSuccessful) {
                     // Clear cookies for the API host
                     RetrofitInstance.clearCookiesForHost(
-                        "10.0.2.2:8000"
+                        "10.0.2.2"
                     )
+
                     // Navigate back to the login screen
                     val intent =
                         Intent(this@MainActivity, LoginActivity::class.java)
