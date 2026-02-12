@@ -18,6 +18,8 @@ import com.campusaula.edbole.kanban_clone_android.kanban.Task
 import com.campusaula.edbole.kanban_clone_android.kanban.TaskStatus
 import com.campusaula.edbole.kanban_clone_android.network.ApiService
 import com.campusaula.edbole.kanban_clone_android.network.RetrofitInstance
+import com.campusaula.edbole.kanban_clone_android.ui.adapters.ProjectCollaboratorAdapter
+import com.campusaula.edbole.kanban_clone_android.ui.adapters.ProjectTaskAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 
@@ -28,9 +30,14 @@ class ProjectDetailActivity : AppCompatActivity() {
     private lateinit var returnActionButton: FloatingActionButton
     private lateinit var addTaskButton: Button
     private lateinit var addCollaboratorButton: Button
+    private lateinit var editProjectButton: Button
+    private lateinit var deleteProjectButton: Button
 
+    private lateinit var taskListRecycler: RecyclerView
     private lateinit var collaboratorListRecycler: RecyclerView
-//    private lateinit var collaboratorListAdapter: CollaboratorListAdapter
+    private lateinit var collaboratorListAdapter: ProjectCollaboratorAdapter
+    private lateinit var taskListAdapter: ProjectTaskAdapter
+
 
     private lateinit var projectTitleText : TextView
     private lateinit var projectDescriptionText : TextView
@@ -59,23 +66,52 @@ class ProjectDetailActivity : AppCompatActivity() {
         returnActionButton.setOnClickListener { finish() }
 
         addTaskButton = findViewById(R.id.addTaskButton)
-//        addTaskButton.setOnClickListener {
-//            val intent: Intent = Intent(this, CreateTaskActivity::class.java)
-//            intent.putExtra("project_id", projectId)
-//            startActivity(intent)
-//        }
+        addTaskButton.setOnClickListener {
+            val intent = Intent(this, TaskAddActivity::class.java)
+            intent.putExtra("project_id", projectId)
+            startActivity(intent)
+            finish()
+        }
 
         addCollaboratorButton = findViewById(R.id.addCollaboratorButton)
-//        addCollaboratorButton.setOnClickListener {
-//            val intent: Intent = Intent(this, AddCollaboratorActivity::class.java)
-//            intent.putExtra("project_id", projectId)
-//            startActivity(intent)
-//        }
+        addCollaboratorButton.setOnClickListener {
+            val intent = Intent(this, CollaboratorAddActivity::class.java)
+            intent.putExtra("project_id", projectId)
+            startActivity(intent)
+            finish()
+        }
+
+        taskListRecycler = findViewById(R.id.taskListRecycler)
+        taskListRecycler.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
+        taskListAdapter = ProjectTaskAdapter(emptyList(), api, projectId, {
+            updateCompletionRate()
+        }, {
+            finish()
+        })
+        taskListRecycler.adapter = taskListAdapter
 
         collaboratorListRecycler = findViewById(R.id.collaboratorListRecycler)
-//        collaboratorListAdapter =
         collaboratorListRecycler.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
+        collaboratorListAdapter = ProjectCollaboratorAdapter(emptyList(), api, projectId) {
+            updateCollaboratorList()
+        }
+        collaboratorListRecycler.adapter = collaboratorListAdapter
 
+        // Danger Zone buttons
+        editProjectButton = findViewById(R.id.editProjectButton)
+        editProjectButton.setOnClickListener {
+            val intent = Intent(this, ProjectEditActivity::class.java)
+            intent.putExtra("project_id", projectId)
+            intent.putExtra("project_name", projectTitleText.text.toString())
+            intent.putExtra("project_description", projectDescriptionText.text.toString())
+            startActivity(intent)
+            finish()
+        }
+
+        deleteProjectButton = findViewById(R.id.deleteProjectButton)
+        deleteProjectButton.setOnClickListener {
+            deleteProject(projectId)
+        }
 
         if (projectId > 0) {
             Log.d("ProjectDetailActivity", "Received project ID: $projectId")
@@ -94,16 +130,22 @@ class ProjectDetailActivity : AppCompatActivity() {
                         projectDescriptionText.text = project.description
 
                         var percentageFinished = 0.0;
+                        val collaborators = project.users
                         val tasks: List<Task> = project.tasks
                         val totalTasks: Int = tasks.size
-                        val perTaskPercentage = if (totalTasks > 0) (1.0 / totalTasks)*100 else 0.0
 
+                        var completedTasks = 0
                         for (task in tasks) {
                             if (task.status == TaskStatus.COMPLETED) {
-                                percentageFinished += perTaskPercentage
+                                completedTasks++
                             }
                         }
-                        completedPercentageText.text = "Completed: ${"%.2f".format(percentageFinished * 100)}%"
+
+                        percentageFinished = if (totalTasks > 0) (completedTasks.toDouble() / totalTasks.toDouble()) * 100 else 0.0
+                        completedPercentageText.text = "Completed: ${"%.2f".format(percentageFinished)}%"
+
+                        taskListAdapter.submitList(tasks.toMutableList())
+                        collaboratorListAdapter.submitList(collaborators.toMutableList())
 
 
                     } else {
@@ -123,5 +165,91 @@ class ProjectDetailActivity : AppCompatActivity() {
 
 
 
+    }
+
+    private fun updateCompletionRate() {
+        lifecycleScope.launch {
+            try {
+                val projectId = intent.getIntExtra("project_id", -1)
+                val projectResponse = api.getProjectById(projectId)
+
+                if (projectResponse.isSuccessful && projectResponse.body() != null) {
+                    val project = projectResponse.body()!!
+                    val tasks: List<Task> = project.tasks
+                    val totalTasks: Int = tasks.size
+
+                    var completedTasks = 0
+                    for (task in tasks) {
+                        if (task.status == TaskStatus.COMPLETED) {
+                            completedTasks++
+                        }
+                    }
+
+                    val percentageFinished = if (totalTasks > 0) (completedTasks.toDouble() / totalTasks.toDouble()) * 100 else 0.0
+                    completedPercentageText.text = "Completed: ${"%.2f".format(percentageFinished)}%"
+
+                    // Actualizar la lista de tareas también
+                    taskListAdapter.submitList(tasks.toMutableList())
+                }
+            } catch (e: Exception) {
+                Log.e("ProjectDetailActivity", "Error updating completion rate", e)
+            }
+        }
+    }
+
+    private fun updateCollaboratorList() {
+        lifecycleScope.launch {
+            try {
+                val projectId = intent.getIntExtra("project_id", -1)
+                val projectResponse = api.getProjectById(projectId)
+
+                if (projectResponse.isSuccessful && projectResponse.body() != null) {
+                    val project = projectResponse.body()!!
+                    val collaborators = project.users
+
+                    collaboratorListAdapter.submitList(collaborators.toMutableList())
+                }
+            } catch (e: Exception) {
+                Log.e("ProjectDetailActivity", "Error updating collaborator list", e)
+            }
+        }
+    }
+
+    private fun deleteProject(projectId: Int) {
+        lifecycleScope.launch {
+            try {
+                Log.d("ProjectDetailActivity", "Deleting project: $projectId")
+                val response = api.deleteProject(projectId)
+
+                if (response.isSuccessful) {
+                    Log.d("ProjectDetailActivity", "Project deleted successfully")
+                    android.widget.Toast.makeText(
+                        this@ProjectDetailActivity,
+                        "Project deleted successfully",
+                        android.widget.Toast.LENGTH_SHORT
+                    ).show()
+                    finish()
+
+                    // Volver a MainActivity
+                    val intent = Intent(this@ProjectDetailActivity, MainActivity::class.java)
+                    startActivity(intent)
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    Log.e("ProjectDetailActivity", "Error deleting project: $errorBody")
+                    android.widget.Toast.makeText(
+                        this@ProjectDetailActivity,
+                        "Error deleting project: ${response.code()}",
+                        android.widget.Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: Exception) {
+                Log.e("ProjectDetailActivity", "Exception deleting project: ${e.message}")
+                android.widget.Toast.makeText(
+                    this@ProjectDetailActivity,
+                    "Failed to delete project: ${e.message}",
+                    android.widget.Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 }
