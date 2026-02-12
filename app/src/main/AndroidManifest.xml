@@ -19,6 +19,18 @@
                 android:name=".ui.CreateProjectActivity"
                 android:exported="false" />
         <activity
+                android:name=".ui.ProjectEditActivity"
+                android:exported="false" />
+        <activity
+                android:name=".ui.CollaboratorAddActivity"
+                android:exported="false" />
+        <activity
+                android:name=".ui.TaskAddActivity"
+                android:exported="false" />
+        <activity
+                android:name=".ui.TaskEditActivity"
+                android:exported="false" />
+        <activity
                 android:name=".ui.ProjectDetailActivity"
                 android:exported="false" />
         <activity

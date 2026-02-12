@@ -15,6 +15,7 @@ import com.campusaula.edbole.kanban_clone_android.R
 import com.campusaula.edbole.kanban_clone_android.kanban.Project
 import com.campusaula.edbole.kanban_clone_android.network.ApiService
 import com.campusaula.edbole.kanban_clone_android.network.RetrofitInstance
+import com.campusaula.edbole.kanban_clone_android.ui.adapters.ProjectItemAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
 
